@@ -1,0 +1,6 @@
+app-id : 68bd2aae63
+app-secret : 1be9b98c4f
+
+Note: To authenticate users inside your app, direct them to
+https://app.speckle.systems/authn/verify/68bd2aae63/{code_challenge}
+`{code_challenge}` is an OAuth2 plain code challenge that your app needs to generate for each authentication request.

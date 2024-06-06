@@ -1,0 +1,20 @@
+{
+  "name": "speckle-hackathon",
+  "version": "1.0.0",
+  "description": "The project aims to enhance project management with a smart system that handles BIM updates between different linked files, establish a simple and intuitive alert system for cleaning unnecessary BIM information in projects,\r preventing the build up of human errors, BIM modelling mistakes and effort during project documentation.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JovinLim/speckle-hackathon.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JovinLim/speckle-hackathon/issues"
+  },
+  "homepage": "https://github.com/JovinLim/speckle-hackathon#readme"
+}
