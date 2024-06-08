@@ -18,6 +18,7 @@
     "vite-plugin-solid": "^2.8.2"
   },
   "dependencies": {
+    "@speckle/viewer": "^2.18.16",
     "solid-js": "^1.8.11"
   }
 }
