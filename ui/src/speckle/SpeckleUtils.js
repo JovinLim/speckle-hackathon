@@ -1,4 +1,5 @@
 import { userInfoQuery } from "./SpeckleQueries.js"
+import { setSpeckleLoader } from "./speckle-view.jsx";
 
 export const SPECKLE_URL = import.meta.env.VITE_SPECKLE_URL;
 export const APP_SPECKLE_ID = import.meta.env.VITE_SPECKLE_ID;
@@ -15,6 +16,8 @@ export function speckleLogOut() {
     // Remove both token and refreshToken from localStorage
     localStorage.removeItem(TOKEN)
     localStorage.removeItem(REFRESH_TOKEN)
+    localStorage.removeItem(`${APP_SPECKLE_NAME}.Authentication`)
+    setSpeckleLoader(null)
 }
 
 export function checkSpeckleAuthStatus(){
@@ -112,7 +115,7 @@ export async function getUserData(){
         if (token){
             let userData = await speckleFetch(userInfoQuery(), token)
             console.log("Speckle User Data: ", userData)
-            localStorage.setItem(`${APP_SPECKLE_NAME}.User`, userData.data.user.name)
+            localStorage.setItem(`${APP_SPECKLE_NAME}.User`, userData.data.activeUser.name)
             localStorage.setItem(`${APP_SPECKLE_NAME}.Details`, JSON.stringify(userData.data.serverInfo))
             localStorage.setItem(`${APP_SPECKLE_NAME}.Authentication`, JSON.stringify(true))
             return userData

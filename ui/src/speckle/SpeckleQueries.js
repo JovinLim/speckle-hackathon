@@ -1,5 +1,5 @@
 export const userInfoQuery = () => `query {
-    user {
+    activeUser {
       name
     },
     serverInfo {
