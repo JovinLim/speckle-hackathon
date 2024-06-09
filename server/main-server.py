@@ -4,9 +4,10 @@ from pydantic import BaseModel
 import requests
 import os
 from dotenv import load_dotenv, dotenv_values
-from utils.db_utils import match_typemark, find_type_mark_value, update_db
+from utils.db_utils import match_typemark, find_type_mark_value, update_db, extractDatabase
 import subprocess
 from typing import Dict, Any
+import json
 
 app = FastAPI()
 
@@ -42,6 +43,10 @@ class MatchRequest(BaseModel):
     stream: str
     model: str
     type_mark: str
+
+class RetrieveRequest(BaseModel):
+    stream: str
+    model: str
 
 # Load environment variables
 dotenv_path = os.path.join(os.path.dirname(__file__), '.env.' + os.environ.get('NODE_ENV', 'development'))
@@ -143,16 +148,22 @@ def update_database(request: UpdateRequest):
         raise HTTPException(status_code=500, detail=str(e))
     
 
-# @app.post("/retrieve_database")
-# def retrieve_database():
-#     response_data = {"Response":"Something went wrong with retrieving database."}
-#     try:
-#         data_dict = extractDatabase(filepath=APP_EXCEL_DATABASE_WSL)
-#         if data_dict:
-#             return data_dict
-    
-#     except requests.exceptions.RequestException as e:
-#         raise HTTPException(status_code=500, detail=str(e))
+@app.post("/retrieve_database")
+def retrieve_database(request: RetrieveRequest):
+    db_file_path = os.path.join(APP_DATABASE_WSL_FOLDER, f"stream_{request.stream}", f"model_{request.model}","master.json")
+    try:
+        data_dict = extractDatabase(filepath=db_file_path)
+        if data_dict:
+            print(f"Successfully extracted database for stream {request.stream}, model {request.model}")
+            return data_dict
+        else:
+            return {"Response": "No data found in the database."}
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="Database file not found.")
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=500, detail="Error decoding the JSON file.")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
     import uvicorn
