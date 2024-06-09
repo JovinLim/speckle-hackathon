@@ -51,6 +51,7 @@ export async function refreshDatabase(){
 }
 
 export async function updateDataViewer(data) {
+    console.log('updating data viewer...')
     const dataKeys = Object.keys(data);
     const paramNameSet = getUniqueParameterNames(data);
     const tableDiv_ = document.getElementById('database-view-params');
@@ -197,8 +198,9 @@ export async function updateDataViewer(data) {
 
 export async function retrieveDatabase(){
     try {
-        if (model().name == 'main'){
-            let token = localStorage.getItem(TOKEN);
+        let token = localStorage.getItem(TOKEN);
+        if (!model() || model().name == 'main'){
+            console.log('retrieiving database...')
             var streamRes = await speckleFetch(streamQuery(stream().id), token);
             var allModels = streamRes.data.stream.branches.items;
             var fullDatabaseJson = {
@@ -251,7 +253,25 @@ export async function retrieveDatabase(){
             // Update the data viewer with the full database JSON
             await updateDataViewer(fullDatabaseJson);
         }
+        
+        else {
+            var databaseRes = await fetch(
+                `${FS_URL}/retrieve_database`,
+                {
+                    method: 'POST',
+                    headers: {
+                    'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                    stream: stream().id,
+                    model: model().id
+                    })
+                }
+                );
 
+                const databaseJson = await databaseRes.json();
+                await updateDataViewer(fullDatabaseJson);
+        }
     }
 
     catch (err) {
@@ -261,7 +281,6 @@ export async function retrieveDatabase(){
 
 const DatabaseViewer = () => {
     onMount(async ()=>{
-        const data_ = await retrieveDatabase()
     })
 
     return (

@@ -11,8 +11,8 @@ import { updateAuditView } from './components/AuditView';
 
 export const [userData, setUserData] = createSignal(null);
 export const [winlocation, setWinLocation] = createSignal(window.location.pathname)
-export const [stream, setStream] = createSignal({id:"58ae34f884",name:"main"});
-export const [model, setModel] = createSignal({id:"441dfd4064",name:"main"});
+export const [stream, setStream] = createSignal(null);
+export const [model, setModel] = createSignal(null);
 export const [selectedCategory, setSelectedCategory] = createSignal(null);
 
 
@@ -222,10 +222,6 @@ function App() {
     await useNavigationGuard(winlocation());
     const data = await getUserData();
     setUserData(data);
-    
-    // DEBUGGING
-    await loadModel();
-    await updateAuditView();
   })
 
   return (

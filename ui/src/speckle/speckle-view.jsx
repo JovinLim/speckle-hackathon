@@ -5,8 +5,8 @@ import { SPECKLE_URL, TOKEN, speckleFetch } from "./SpeckleUtils";
 import { model, stream } from "../App";
 import { commitQuery, streamQuery } from "./SpeckleQueries";
 import { selectedTypeMark } from "../components/DataViewer";
-import { selFamily, selIfcGUID } from "../components/DatabaseView";
-import { selApplicationId } from "../components/AuditView";
+import { retrieveDatabase, selFamily, selIfcGUID } from "../components/DatabaseView";
+import { selApplicationId, updateAuditView } from "../components/AuditView";
 
 export const [speckleViewer, setSpeckleViewer] = createSignal(null);
 export const [filter, setFilter] = createSignal(null);
@@ -73,6 +73,7 @@ export async function loadModel(){
     console.error("There is either no stream or model selected.")
     return
   }
+  retrieveDatabase();
 
   var modelFullName, allModels;
   let token = localStorage.getItem(TOKEN)
@@ -129,7 +130,7 @@ export async function loadModel(){
         setLoadedModels(models);
         break;
     }
-    
+    updateAuditView();
     updateRendering();
   }
 

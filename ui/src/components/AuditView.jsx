@@ -8,6 +8,7 @@ import { selRow, setSelFamily, setSelIfcGUID, setSelRow } from './DatabaseView';
 export const [selApplicationId, setSelApplicationId] = createSignal(null);
 
 export async function updateAuditView() {
+  console.log('updating audit view...');
   const tableBody = document.getElementById('audit-view-tbody');
   tableBody.innerHTML = ''; // Clear previous rows
 
@@ -18,13 +19,24 @@ export async function updateAuditView() {
     const rawModelData = node['model']['raw'];
     if ('definition' in rawModelData && rawModelData.speckle_type == "Objects.Other.Revit.RevitInstance") {
       const speckleId = rawModelData.id;
-
-      const sourcePath = 'revitLinkedModelPath' in rawModelData ? rawModelData.revitLinkedModelPath : "-";
-      const levelName = 'name' in rawModelData.level ? rawModelData.level.name : "-";
-      const familyName = 'family' in rawModelData.definition ? rawModelData.definition.family : "-";
-      const elemId = rawModelData.elementId;
-      const typeName = 'type' in rawModelData.definition ? rawModelData.definition.type : "-";
-      const appId = rawModelData.applicationId;
+      let sourcePath = "-";
+      let levelName = "-";
+      let familyName = "-";
+      let elemId = "-";
+      let typeName = "-";
+      let appId = "-";
+      sourcePath = 'revitLinkedModelPath' in rawModelData ? rawModelData.revitLinkedModelPath : "-";
+      if ('level' in rawModelData && rawModelData.level != null) {
+        levelName = rawModelData.level.name;
+      }
+      if ('family' in rawModelData.definition){
+        familyName = rawModelData.definition.family;
+      }
+      elemId = rawModelData.elementId;
+      if ('type' in rawModelData.definition){
+        typeName = rawModelData.definition.type;
+      }
+      appId = rawModelData.applicationId;
 
       var typeMark
       const params_ = rawModelData['parameters'];

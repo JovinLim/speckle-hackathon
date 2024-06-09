@@ -24,7 +24,14 @@ async function toggleSourceFilter(){
     }
 }
 
-
+export async function updateSourceFilter(){
+    const sourceAuditDataCells = document.querySelectorAll(`[data-param="Source"][data-view="audit"][data-type="cell"]`)
+    var uniqueSources = []
+    sourceAuditDataCells.forEach(sourceCell => {
+        const sourcePath_ = sourceCell.getAttribute('data-paramval');
+        uniqueSources.push(sourcePath_);
+    })
+}
 
 const SourceFilter = () => {
     onMount(()=>{
